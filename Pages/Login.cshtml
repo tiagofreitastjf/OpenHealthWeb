@@ -1,0 +1,23 @@
+﻿@page
+@model OpenHealthWeb.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card">
+        <div class="card-body">
+            <label class="col-form-label">E-mail</label>
+            <input id="txtEmail" type="email" class="form-control" placeholder="Exemplo: joao@gmail.com"/>
+            <label class="col-form-label">Senha</label>
+            <input id="txtSenha" type="password" class="form-control"/>
+            <div class="col-md-12 mt-3 mb-3">
+                <a href="#">Esqueci a senha</a>
+            </div>
+            <button id="btnEntrar" type="button" class="btn btn-secondary">Entrar</button>
+            <div class="col-md-12 text-center mt-3">
+                <a href="#">Não tem cadastro? Clique aqui para cadastrar</a>
+            </div>
+        </div>
+    </div>
+</div>

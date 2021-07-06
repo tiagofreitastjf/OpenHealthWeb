@@ -1,0 +1,52 @@
+﻿@page
+@model OpenHealthWeb.Pages.CadastroModel
+@{
+    ViewData["Title"] = "Cadastro";
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Cadastrar</h6>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">Nome completo</label>
+                    <input id="txtNome" type="text" class="form-control" />
+                    <label class="col-form-label">CPF</label>
+                    <input id="txtCPF" type="text" class="form-control" />
+                    <label class="col-form-label">Nascimento</label>
+                    <input id="txtNascimento" type="date" class="form-control" />
+                    <label class="col-form-label">E-mail</label>
+                    <input id="txtEmail" type="email" class="form-control" />
+                    <label class="col-form-label">Senha</label>
+                    <input id="txtSenha" type="password" class="form-control" />
+                    <label class="col-form-label">Confirme sua senha</label>
+                    <input id="txtSenhaConfirmar" type="password" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="col-form-label">CEP</label>
+                    <input id="txtCEP" type="text" class="form-control" placeholder="Exemplo: 12345-678" />
+                    <label class="col-form-label">Endereço</label>
+                    <input id="txtEndereco" type="text" class="form-control" />
+                    <label class="col-form-label">Número</label>
+                    <input id="txtNumero" type="text" class="form-control" />
+                    <label class="col-form-label">Complemento</label>
+                    <input id="txtComplemento" type="text" class="form-control" />
+                    <label class="col-form-label">Bairro</label>
+                    <input id="txtBairro" type="text" class="form-control" />
+                    <label class="col-form-label">Cidade</label>
+                    <input id="txtCidade" type="text" class="form-control" />
+                    <label class="col-form-label">Estado</label>
+                    <input id="txtEstado" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-3 text-center">
+                    <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

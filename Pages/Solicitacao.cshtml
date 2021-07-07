@@ -1,0 +1,20 @@
+﻿@page
+@model OpenHealthWeb.Pages.SolicitacaoModel
+@{
+    ViewData["Title"] = "Solicitação de acesso";
+}
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card col-6">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Cadastrar</h6>
+            </div>
+            <label class="col-form-label">Digite o CPF do paciente</label>
+            <input id="txtCPF" type="text" class="form-control" placeholder="Exemplo: 123.456.789-12" />
+            <div class="col-md-12 mt-3 text-center">
+                <button id="btnSolicitar" type="button" class="btn btn-secondary">Solicitar acesso</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@page
+@model OpenHealthWeb.Pages.EnviarExameModel
+@{
+    ViewData["Title"] = "Enviar exame";
+}
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card col-6">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Exame</h6>
+            </div>
+            <label class="col-form-label">Paciente</label>
+            <input id="txtPaciente" type="text" class="form-control" />
+            <label class="col-form-label">Data</label>
+            <input id="txtData" type="date" class="form-control" />
+            <label class="col-form-label">Observação</label>
+            <input id="txtObervacao" type="text" class="form-control"/>
+            <label class="col-form-label">Exame</label>
+            <input id="txtExame" type="file" class="form-control"/>
+            <div class="col-md-12 mt-3 text-center">
+                <button id="btnEnviar" type="button" class="btn btn-secondary">Enviar exame</button>
+            </div>
+        </div>
+    </div>
+</div>

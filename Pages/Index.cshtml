@@ -1,10 +1,70 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Início";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header text-center">Dados</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    
+                </div>
+                <div class="col-sm">
+                    <p id="lblNome">Nome: Tiago</p>
+                    <p id="lblIdade">Idade: 23 anos</p>
+                    <p id="lblEstadoCivil">Estado civil: Solteiro</p>
+                    <p id="lblVacinas">Última vacinação: 05/05/2021</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header bg-light text-center">Notificações</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Titulo</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">Descrição</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVerTodos" type="button" class="btn btn-secondary">
+                                        Ver todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Titulo</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">Descrição</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnSim" type="button" class="btn btn-secondary">
+                                        Sim
+                                    </button>
+                                    <button id="btnNao" type="button" class="btn btn-secondary">
+                                        Não
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

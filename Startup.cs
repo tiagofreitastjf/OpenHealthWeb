@@ -24,6 +24,13 @@ namespace OpenHealthWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                //options.IdleTimeout = TimeSpan.FromSeconds(10);
+                //options.Cookie.HttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +53,8 @@ namespace OpenHealthWeb
             app.UseRouting();
 
             app.UseAuthorization();
+            
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

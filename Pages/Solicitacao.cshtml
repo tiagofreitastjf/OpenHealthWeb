@@ -18,3 +18,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(async function () {
+
+    });
+
+    $("[id$=btnSolicitar]").unbind("click").bind("click", function () {
+        ajaxRequestApi(
+            urlAPI + "Clientes/SolicitarAcesso",
+            "GET",
+            {},
+            "",
+            function (data) {
+
+            }
+        )
+    });
+</script>

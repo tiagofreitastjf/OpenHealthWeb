@@ -1,4 +1,6 @@
-﻿function ajaxRequestApi(url, type, data, token, onResponse) {
+﻿let urlAPI = "http://localhost:5000/";
+
+function ajaxRequestApi(url, type, data, token, onResponse) {
     $.ajax({
         type: type,
         url: url,

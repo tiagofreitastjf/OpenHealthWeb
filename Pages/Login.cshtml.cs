@@ -9,8 +9,12 @@ namespace OpenHealthWeb.Pages
 {
     public class LoginModel : PageModel
     {
+        public string Email { get; set; }
+        public string Senha { get; set; }
+
         public void OnGet()
         {
+            Usuario.Login(Email, Senha);
         }
     }
 }

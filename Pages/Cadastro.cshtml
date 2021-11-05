@@ -10,43 +10,199 @@
             <div class="col-md-12 text-center">
                 <h6>Cadastrar</h6>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">Nome completo</label>
-                    <input id="txtNome" type="text" class="form-control" maxlength="200"/>
-                    <label class="col-form-label">CPF</label>
-                    <input id="txtCPF" type="text" class="form-control"  maxlength="14"/>
-                    <label class="col-form-label">Nascimento</label>
-                    <input id="txtNascimento" type="date" class="form-control" />
-                    <label class="col-form-label">E-mail</label>
-                    <input id="txtEmail" type="email" class="form-control" maxlength="100"/>
-                    <label class="col-form-label">Senha</label>
-                    <input id="txtSenha" type="password" class="form-control" maxlength="20"/>
-                    <label class="col-form-label">Confirme sua senha</label>
-                    <input id="txtSenhaConfirmar" type="password" class="form-control"  maxlength="20"/>
+            <form action="https://localhost:5001/cliente" method="post" onsubmit="return validatePassword(event)">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-form-label">Nome completo</label>
+                        <input id="txtNome" type="text" class="form-control" maxlength="200" required>
+                        <label class="col-form-label">CPF</label>
+                        <input id="txtCPF" type="number" class="form-control" maxlength="14" required>
+                        <label class="col-form-label">Nascimento</label>
+                        <input id="txtNascimento" type="date" class="form-control" required />
+                        <label class="col-form-label">E-mail</label>
+                        <input id="txtEmail" type="email" class="form-control" maxlength="100" required />
+                        <label class="col-form-label">Senha</label>
+                        <input id="txtSenha" type="password" class="form-control" maxlength="20" required />
+                        <label class="col-form-label">Confirme sua senha</label>
+                        <input id="txtSenhaConfirmar" type="password" class="form-control" maxlength="20" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label">CEP</label>
+                        <input id="txtCEP" type="text" class="form-control" placeholder="Exemplo: 12345-678" maxlength="9" required />
+                        <label class="col-form-label">Endereço</label>
+                        <input id="txtEndereco" type="text" class="form-control" maxlength="150" required />
+                        <label class="col-form-label">Número</label>
+                        <input id="txtNumero" type="number" class="form-control" required />
+                        <label class="col-form-label">Complemento</label>
+                        <input id="txtComplemento" type="text" class="form-control" maxlength="100" />
+                        <label class="col-form-label">Bairro</label>
+                        <input id="txtBairro" type="text" class="form-control" maxlength="100" required />
+                        <label class="col-form-label">Cidade</label>
+                        <input id="txtCidade" type="text" class="form-control" maxlength="100" required />
+                        <label class="col-form-label">Estado</label>
+                        <select name="selEstado" id="selEstado" class="form-control" required></select>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="col-form-label">CEP</label>
-                    <input id="txtCEP" type="text" class="form-control" placeholder="Exemplo: 12345-678"  maxlength="9"/>
-                    <label class="col-form-label">Endereço</label>
-                    <input id="txtEndereco" type="text" class="form-control" maxlength="150"/>
-                    <label class="col-form-label">Número</label>
-                    <input id="txtNumero" type="text" class="form-control" />
-                    <label class="col-form-label">Complemento</label>
-                    <input id="txtComplemento" type="text" class="form-control"  maxlength="100"/>
-                    <label class="col-form-label">Bairro</label>
-                    <input id="txtBairro" type="text" class="form-control"  maxlength="100"/>
-                    <label class="col-form-label">Cidade</label>
-                    <input id="txtCidade" type="text" class="form-control" maxlength="100"/>
-                    <label class="col-form-label">Estado</label>
-                    <input id="txtEstado" type="text" class="form-control" maxlength="2"/>
+                <div class="row">
+                    <div class="col-md-12 mt-3 text-center">
+                        <button id="btnCadastrar" type="submit" class="btn btn-success">Cadastrar</button>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 mt-3 text-center">
-                    <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+<script>
+
+    const senha = document.getElementById("txtSenha");
+    const senhaConfirmar = document.getElementById("txtSenhaConfirmar");
+    var select = document.getElementById("selEstado");
+    var estados = [{
+        "ID": "1",
+        "Sigla": "AC",
+        "Nome": "Acre"
+    },
+    {
+        "ID": "2",
+        "Sigla": "AL",
+        "Nome": "Alagoas"
+    },
+    {
+        "ID": "3",
+        "Sigla": "AM",
+        "Nome": "Amazonas"
+    },
+    {
+        "ID": "4",
+        "Sigla": "AP",
+        "Nome": "Amapá"
+    },
+    {
+        "ID": "5",
+        "Sigla": "BA",
+        "Nome": "Bahia"
+    },
+    {
+        "ID": "6",
+        "Sigla": "CE",
+        "Nome": "Ceará"
+    },
+    {
+        "ID": "7",
+        "Sigla": "DF",
+        "Nome": "Distrito Federal"
+    },
+    {
+        "ID": "8",
+        "Sigla": "ES",
+        "Nome": "Espírito Santo"
+    },
+    {
+        "ID": "9",
+        "Sigla": "GO",
+        "Nome": "Goiás"
+    },
+    {
+        "ID": "10",
+        "Sigla": "MA",
+        "Nome": "Maranhão"
+    },
+    {
+        "ID": "11",
+        "Sigla": "MG",
+        "Nome": "Minas Gerais"
+    },
+    {
+        "ID": "12",
+        "Sigla": "MS",
+        "Nome": "Mato Grosso do Sul"
+    },
+    {
+        "ID": "13",
+        "Sigla": "MT",
+        "Nome": "Mato Grosso"
+    },
+    {
+        "ID": "14",
+        "Sigla": "PA",
+        "Nome": "Pará"
+    },
+    {
+        "ID": "15",
+        "Sigla": "PB",
+        "Nome": "Paraíba"
+    },
+    {
+        "ID": "16",
+        "Sigla": "PE",
+        "Nome": "Pernambuco"
+    },
+    {
+        "ID": "17",
+        "Sigla": "PI",
+        "Nome": "Piauí"
+    },
+    {
+        "ID": "18",
+        "Sigla": "PR",
+        "Nome": "Paraná"
+    },
+    {
+        "ID": "19",
+        "Sigla": "RJ",
+        "Nome": "Rio de Janeiro"
+    },
+    {
+        "ID": "20",
+        "Sigla": "RN",
+        "Nome": "Rio Grande do Norte"
+    },
+    {
+        "ID": "21",
+        "Sigla": "RO",
+        "Nome": "Rondônia"
+    },
+    {
+        "ID": "22",
+        "Sigla": "RR",
+        "Nome": "Roraima"
+    },
+    {
+        "ID": "23",
+        "Sigla": "RS",
+        "Nome": "Rio Grande do Sul"
+    },
+    {
+        "ID": "24",
+        "Sigla": "SC",
+        "Nome": "Santa Catarina"
+    },
+    {
+        "ID": "25",
+        "Sigla": "SE",
+        "Nome": "Sergipe"
+    },
+    {
+        "ID": "26",
+        "Sigla": "SP",
+        "Nome": "São Paulo"
+    },
+    {
+        "ID": "27",
+        "Sigla": "TO",
+        "Nome": "Tocantins"
+    }];
+
+    function validatePassword(e) {
+        if (senha.value != senhaConfirmar.value) {
+            alert("Senhas diferentes!\nConfirme a sua senha!");
+            e.returnValue = false;
+        }
+    }
+    
+    for (let i = 0; i < estados.length; i++) {
+        select.options[select.options.length] = new Option(estados[i].Nome, estados[i].Sigla);
+    }
+
+</script>

@@ -1,8 +1,12 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @model OpenHealthWeb.Pages.EnviarExameModel
 @{
     ViewData["Title"] = "Enviar exame";
 }
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="col-md-12 d-flex justify-content-center">
     <div class="card col-6">
@@ -10,17 +14,99 @@
             <div class="col-md-12 text-center">
                 <h6>Exame</h6>
             </div>
-            <label class="col-form-label">Paciente</label>
+            <label class="col-form-label">Nome da Paciente</label>
             <input id="txtPaciente" type="text" class="form-control" />
             <label class="col-form-label">Data</label>
             <input id="txtData" type="date" class="form-control" />
             <label class="col-form-label">Observação</label>
-            <input id="txtObervacao" type="text" class="form-control" maxlength="500"/>
+            <input id="txtObservacao" type="text" class="form-control" maxlength="500" />
             <label class="col-form-label">Exame</label>
-            <input id="txtExame" type="file" class="form-control"/>
+            <input id="txtExame" type="file" class="form-control" />
             <div class="col-md-12 mt-3 text-center">
+                <div class="spinner-border" role="status" id="spEnviarExame" style="display: none">
+                    <span class="sr-only"></span>
+                </div>
                 <button id="btnEnviar" type="button" class="btn btn-secondary">Enviar exame</button>
             </div>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var idCliente = 0;
+    $(document).ready(function () {
+        $("#txtPaciente").autocomplete({
+            source: function (request, response) {
+                ajaxRequestApi('http://localhost:5000/Cliente/Pesquisar?idClinica=@HttpContextAccessor.HttpContext.Session.GetString("idClinica")&nome=' + $("#txtPaciente").val(), 'GET', {}, '', function (e, statusCode) {
+
+                    response(e.map((v) => {
+                        return {
+                            label: v.nome,
+                            value: v.nome,
+                            id: v.id
+                        }
+                    }));
+        });
+
+
+            },
+
+            minLength: 3,
+            select: function (event, ui) {
+                idCliente = ui.item.id;
+            }
+        });
+    });
+
+    $('#txtPaciente').change(function () {
+        if ($(this).val() == '') idCliente = 0;
+    })
+
+
+    $('#btnEnviar').click(async function () {
+        let nomePaciente = $('#txtPaciente');
+        let data = $('#txtData');
+        let observacao = $('#txtObservacao');
+        let exame = $('#txtExame');
+
+        let erros = '';
+        if (nomePaciente.val() == '' || idCliente == 0) erros += 'Preencha o Nome da Paciente.\n';
+        if (data.val() == '') erros += 'Preencha a Data.\n';
+        if (exame[0].files.length == 0) erros += 'Selecione um arquivo.\n'
+
+        if (erros != '') return alert(erros);
+
+        $('#btnEnviar').hide();
+        $('#spEnviarExame').show();
+        ajaxRequestApi('http://localhost:5000/Exame/', 'POST', {
+            "idCliente": idCliente,
+            "idClinica": '@HttpContextAccessor.HttpContext.Session.GetString("idClinica")',
+            "data": data.val(),
+            "observacao": observacao.val(),
+            "arquivoBase64": await getBase64(exame[0].files[0])
+        }, '', function (e, statusCode) {
+            if (statusCode == 200) {
+                nomePaciente.val('');
+                data.val('');
+                observacao.val('');
+                exame.val('');
+            }
+            $('#spEnviarExame').hide();
+            $('#btnEnviar').show();
+        });
+       // if (txtExame.val() == '') erros += 'Preencha a Data';
+
+    });
+
+
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+</script>

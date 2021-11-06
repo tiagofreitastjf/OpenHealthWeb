@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -33,6 +34,7 @@ namespace OpenHealthWeb.Pages
                 else
                 {
                     HttpContext.Session.Set("Token", Encoding.ASCII.GetBytes(Usuario.GerarToken(json["nome"].ToString(), json["email"].ToString())));
+                    HttpContext.Session.SetString("idClinica", json["idClinica"].ToString());
                     await HttpContext.Session.CommitAsync();
                     await HttpContext.Session.LoadAsync();
                     byte[] session;
@@ -42,7 +44,6 @@ namespace OpenHealthWeb.Pages
                     }
                 }
             }
-
             return null;
         }
     }

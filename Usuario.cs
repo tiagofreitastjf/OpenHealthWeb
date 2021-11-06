@@ -15,14 +15,14 @@ namespace OpenHealthWeb
 {
     public class Usuario
     {
-        public async static Task<JObject> Login(string email, string senha)
+        public async static Task<JObject> Login(string email, string senha, bool cliente)
         {
             try
             {
                 HttpClient client = new HttpClient();
                 var sJson = new { Email = email, Senha = senha };
                 string jsonSerialize = JsonConvert.SerializeObject(sJson, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                HttpResponseMessage response = await client.PostAsync("http://localhost:5000/Cliente/login", new StringContent(jsonSerialize, System.Text.Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await client.PostAsync($"http://localhost:5000/{(cliente? "Cliente" : "Profissional")}/login", new StringContent(jsonSerialize, System.Text.Encoding.UTF8, "application/json"));
                 string content = await response.Content.ReadAsStringAsync();
                 return JObject.Parse(content);
             }

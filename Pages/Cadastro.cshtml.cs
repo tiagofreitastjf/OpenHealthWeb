@@ -9,15 +9,8 @@ namespace OpenHealthWeb.Pages
 {
     public class CadastroModel : PageModel
     {
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            byte[] session;
-            if (!HttpContext.Session.TryGetValue("Token", out session))
-            {
-                return Redirect("/Login");
-            }
-
-            return null;
         }
     }
 }

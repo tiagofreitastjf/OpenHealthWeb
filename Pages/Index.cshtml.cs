@@ -24,7 +24,7 @@ namespace OpenHealthWeb.Pages
             //{
             //    return Redirect("/Login");
             //}
-
+            return Redirect("/Cliente/Prontuario");
             return null;
         }
     }

@@ -3,17 +3,157 @@
 @{
 }
 
-<div class="col-md-12 d-flex justify-content-center">
-    <div class="card col-6">
-        <div class="card-body">
-            <div class="col-md-12 text-center">
-                <h6>Cadastrar</h6>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">Dados</div>
+                <div id="pnCliente" class="card-body">
+                </div>
             </div>
-            <label class="col-form-label">Digite o CPF do paciente</label>
-            <input id="txtCPF" type="text" class="form-control" placeholder="Exemplo: 123.456.789-12" />
-            <div class="col-md-12 mt-3 text-center">
-                <button id="btnSolicitar" type="button" class="btn btn-secondary">Solicitar acesso</button>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 text-center">
+                        <h6>Solicitar acesso</h6>
+                    </div>
+                    <label class="col-form-label">Digite o CPF do paciente</label>
+                    <input id="txtCPF" type="text" class="form-control" placeholder="Exemplo: 123.456.789-12" />
+                    <div class="col-md-12 mt-3 text-center">
+                        <button id="btnSolicitar" type="button" class="btn btn-secondary">Solicitar acesso</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header bg-light text-center">Notificações</div>
+            <div class="card-body">
+                <div id="pnProntuario" class="row">
+                    @*<div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Titulo</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">Descrição</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVerTodos" type="button" class="btn btn-secondary">
+                                        Ver todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Titulo</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">Descrição</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnSim" type="button" class="btn btn-secondary">
+                                        Sim
+                                    </button>
+                                    <button id="btnNao" type="button" class="btn btn-secondary">
+                                        Não
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    let dados = {};
+
+    $(document).ready(function (){
+        CarregarDados();
+    });
+
+    function CarregarDados()
+    {
+        ajaxRequestApi(
+            urlAPI + "Prontuario/GetProntuarioProfissional",
+            "GET",
+            {
+                idProfissional: 1
+            },
+            "",
+            function (data)
+            {
+                dados = data;
+                let pn = `<div class="row">
+                        <div class="col-sm">
+                            <p id="lblNome">Nome: ${data.nome}</p>
+                            <p id="lblNascimento">Data de nascimento: ${data.dataNascimento}</p>
+                        </div>
+                    </div>`;
+
+                $("[id$=pnCliente]").empty().append(pn);
+                
+                pn = "";
+                for (let i = 0; i < data.consulta.length; i++)
+                {
+                    pn += `<div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtData">${data.consulta[i].data}</label>
+                                </div>    
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">${data.consulta[i].tipoConsulta}</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">${data.consulta[i].descricao}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVer" type="button" class="btn btn-secondary">
+                                        Ver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                for (let i = 0; i < data.consulta.length; i++)
+                {
+                    pn += `<div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtData">${data.vacina[i].data}</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">${data.vacina[i].tipoVacina}</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">${data.vacina[i].observacao}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVer" type="button" class="btn btn-secondary">
+                                        Ver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                $("[id$=pnProntuario]").empty().append(pn);
+            }
+        );
+    }
+</script>

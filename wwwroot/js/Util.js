@@ -52,3 +52,12 @@ function ajaxRequestApi(url, type, data, token, onResponse) {
         }
     });
 }
+
+function getParamByName(name) {
+    let url = location.href;
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
+    return results == null ? null : results[1];
+}

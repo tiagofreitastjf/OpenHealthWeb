@@ -1,4 +1,75 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @model OpenHealthWeb.Pages.Profissional.FichaConsultaModel
 @{
+    ViewData["Title"] = "Consulta";
 }
+
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card col-6">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Consulta</h6>
+            </div>
+            <label class="col-form-label">Data</label>
+            <input id="txtData" type="date" class="form-control" />
+            <label class="col-form-label">Tipo</label>
+            <input id="txtTipo" type="text" class="form-control" />
+            <label class="col-form-label">Descrição</label>
+            <textarea id="txtDescricao" type="text" class="form-control" maxlength="500"></textarea>
+            <div class="col-md-12 mt-3 text-center">
+                <div class="spinner-border" role="status" id="spSalvar" style="display: none">
+                    <span class="sr-only"></span>
+                </div>
+                <button id="btnSalvar" type="button" class="btn btn-secondary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+
+ $('#btnSalvar').click(async function () {
+        let data = $('#txtData');
+        let tipo = $('#txtTipo');
+        let descricao = $('#txtDescricao');
+
+        let erros = '';
+        if (data.val() == '') erros += 'Preencha a Data.\n';
+     if (tipo.val() == '') erros += 'Preencha o Tipo.\n';
+     if (descricao.val() == '') erros += 'Preencha a Descrição.\n';
+
+        if (erros != '') return alert(erros);
+
+     $('#btnSalvar').hide();
+     $('#spSalvar').show();
+     ajaxRequestApi('http://localhost:5000/Consulta/', 'POST', {
+         'id': getParamByName('id'),
+         'idCliente': getParamByName('idCliente'),
+           // 'idClinica': '@HttpContextAccessor.HttpContext.Session.GetString("idClinica")',
+            'idClinica': '1',
+          //  'idProfissional': '@HttpContextAccessor.HttpContext.Session.GetString("idUsuario")',
+           'idProfissional': '1',
+            'data': data.val(),
+         'descricao': descricao.val(),
+            'tipoConsulta': tipo.val(),
+            }, '', function (e, statusCode) {
+            if (statusCode == 200) {
+            data.val('');
+                tipo.val('');
+                descricao.val('');
+            }
+            $('#spSalvar').hide();
+            $('#btnSalvar').show();
+     });
+            // if (txtExame.val() == '') erros += 'Preencha a Data';
+
+ });
+</script>

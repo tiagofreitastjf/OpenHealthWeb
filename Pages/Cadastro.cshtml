@@ -49,7 +49,7 @@
                 <div class="spinner-border" role="status" id="spCadastrar" style="display: none">
                     <span class="sr-only"></span>
                 </div>
-                <button id="btnCadastrar" type="submit" class="btn btn-success">Cadastrar</button>
+                <button id="btnCadastrar" type="button" class="btn btn-success">Cadastrar</button>
             </div>
         </div>
     </div>
@@ -82,54 +82,65 @@
         $('#btnCadastrar').hide();
         $('#spCadastrar').show();
 
-        let data = {
-            "nome": nome,
-            "dataNascimento": new Date(nascimento).toISOString(),
-            "email": email,
-            "senha": senha,
-            "cpf": cpf,
-            "cep": cep,
-            "numero": numero,
-            "bairro": bairro,
-            "endereco": endereco,
-            "complemento": complemento,
-            "cidade": cidade,
-            "estado": estado,
+        let dto = {
+            nome: nome,
+            dataNascimento: nascimento,
+            email: email,
+            senha: senha,
+            cpf: cpf,
+            cep: cep,
+            numero: numero,
+            bairro: bairro,
+            endereco: endereco,
+            complemento: complemento,
+            cidade: cidade,
+            estado: estado
         };
         
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:5000/Cliente/',
-            data: JSON.stringify(data),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            success: function (data) {
-                console.log('data is ' + data);
-                nome.val('');
-                nascimento.val('');
-                email.val('');
-                senha.val('');
-                senhaConfirmar.val('');
-                cpf.val('');
-                cep.val('');
-                numero.val('');
-                bairro.val('');
-                endereco.val('');
-                complemento.val('');
-                cidade.val('');
-                estado.val('');
-
-                // redirect to login page
+        ajaxRequestApi(
+            urlAPI + "Cliente/",
+            "POST",
+            dto,
+            "",
+            function (data)
+            {
                 window.location.replace("/Login");
-            },
-            error: function (e) {
-                alert("INSIDE FAILURE");
-                console.log(e);
             }
-        });
+        );
 
-        $('#spEnviarExame').hide();
-        $('#btnEnviar').show();
+        //$.ajax({
+        //    type: 'POST',
+        //    url: 'http://localhost:5000/Cliente/',
+        //    data: JSON.stringify(data),
+        //    contentType: 'application/json; charset=utf-8',
+        //    dataType: 'json',
+        //    success: function (data) {
+        //        console.log('data is ' + data);
+        //        nome.val('');
+        //        nascimento.val('');
+        //        email.val('');
+        //        senha.val('');
+        //        senhaConfirmar.val('');
+        //        cpf.val('');
+        //        cep.val('');
+        //        numero.val('');
+        //        bairro.val('');
+        //        endereco.val('');
+        //        complemento.val('');
+        //        cidade.val('');
+        //        estado.val('');
+
+        //        // redirect to login page
+        //        window.location.replace("/Login");
+        //    },
+        //    error: function (e) {
+        //        alert(e);
+        //        //console.log(e);
+        //    }
+        //});
+
+        //$('#spEnviarExame').hide();
+        //$('#btnEnviar').show();
     });
 
 </script>

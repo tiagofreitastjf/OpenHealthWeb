@@ -32,7 +32,9 @@
 
 <script>
     $(document).ready(function () {
-
+        if (getParamByName('id')) {
+            carregaDados();
+        }
     });
 
 
@@ -72,4 +74,17 @@
             // if (txtExame.val() == '') erros += 'Preencha a Data';
 
  });
+
+    function carregaDados() {
+        ajaxRequestApi(`http://localhost:5000/Consulta/${getParamByName('id')}`, 'GET', {}, '', function (e, statusCode) {
+            if (statusCode == 200) {
+                console.log(e);
+                $('#txtData').val(e.data.split('T')[0]);
+                $('#txtTipo').val(e.tipoConsulta);
+                $('#txtDescricao').val(e.descricao);
+            }
+            $('#spSalvar').hide();
+            $('#btnSalvar').show();
+     });
+    }
 </script>

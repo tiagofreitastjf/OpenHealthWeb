@@ -30,7 +30,9 @@
 
 <script>
     $(document).ready(function () {
-
+        if (getParamByName('id')) {
+            carregaDados();
+        }
     });
 
 
@@ -69,6 +71,19 @@
             // if (txtExame.val() == '') erros += 'Preencha a Data';
 
  });
+
+    function carregaDados() {
+        ajaxRequestApi(`http://localhost:5000/Vacina/${getParamByName('id')}`, 'GET', {}, '', function (e, statusCode) {
+            if (statusCode == 200) {
+                $('#txtData').val(e.data.split('T')[0]);
+                $('#txtTipo').val(e.tipoVacina);
+                $('#txtObservacao').val(e.observacao);
+            }
+            $('#spSalvar').hide();
+            $('#btnSalvar').show();
+        });
+    }
+
 
 </script>
 

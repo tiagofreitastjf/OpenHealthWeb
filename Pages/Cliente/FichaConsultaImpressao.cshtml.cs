@@ -5,8 +5,15 @@ namespace OpenHealthWeb.Pages.Profissional
 {
     public class FichaConsultaImpressaoModel : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            byte[] session;
+            if (!HttpContext.Session.TryGetValue("Token", out session))
+            {
+                return Redirect("/Login");
+            }
+
+            return null;
         }
     }
 }

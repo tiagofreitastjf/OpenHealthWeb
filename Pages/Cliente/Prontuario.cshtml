@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-sm-12 text-center">
                                     <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data.consulta[i].id}, 'Consulta')">
-                                        Ver
+                                        <i class="fas fa-eye"></i>&ensp;Ver
                                     </button>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="col-sm-12 text-center">
                                     <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data.vacina[i].id}, 'Vacina')">
-                                        Ver
+                                        <i class="fas fa-eye"></i>&ensp;Ver
                                     </button>
                                 </div>
                             </div>
@@ -111,10 +111,10 @@
                                 </div>
                                 <div class="col-sm-12 text-center">
                                     <a id="btnSim" type="button" class="btn btn-secondary btn-success btnSim" onclick="Acesso(true, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
-                                        Sim
+                                        <i class="fas fa-lock"></i>&ensp;Sim
                                     </a>
                                     <button id="btnNao" type="button" class="btn btn-secondary btn-danger btnNao" onclick="Acesso(false, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
-                                        Não
+                                        <i class="fas fa-lock-open"></i>&ensp;Não
                                     </button>
                                 </div>
                             </div>

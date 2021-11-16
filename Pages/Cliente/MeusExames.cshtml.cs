@@ -9,8 +9,15 @@ namespace OpenHealthWeb.Pages.Cliente
 {
     public class MeusExamesModel : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            byte[] session;
+            if (!HttpContext.Session.TryGetValue("Token", out session))
+            {
+                return Redirect("/Login");
+            }
+
+            return null;
         }
     }
 }

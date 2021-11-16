@@ -11,11 +11,11 @@ namespace OpenHealthWeb.Pages.Profissional
     {
         public IActionResult OnGet()
         {
-            //byte[] session;
-            //if (!HttpContext.Session.TryGetValue("Token", out session))
-            //{
-            //    return Redirect("/Login");
-            //}
+            byte[] session;
+            if (!HttpContext.Session.TryGetValue("Token", out session))
+            {
+                return Redirect("/Login");
+            }
 
             return null;
         }

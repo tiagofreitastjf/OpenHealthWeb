@@ -1,0 +1,53 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model OpenHealthWeb.Pages.Profissional.FichaConsultaImpressaoModel
+@{
+    ViewData["Title"] = "Consulta";
+}
+
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card col-6">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Consulta</h6>
+            </div>
+            <div class="spinner-border text-center" role="status" id="spCarregar" style="display: none">
+                <span class="sr-only"></span>
+            </div>
+            <div id="divConteudo" class="text-left">
+                <label class="col-form-label" style="font-weight:bold">Data: <label class="col-form-label" id="lblData" style="font-weight:500"></label></label><br />
+                <label class="col-form-label" style="font-weight:bold">Tipo: <label class="col-form-label" id="lblTipo" style="font-weight:500"></label></label><br />
+                <label class="col-form-label" style="font-weight:bold">Descrição: <label class="col-form-label" id="lblDescricao" style="font-weight:500"></label></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        if (getParamByName('id')) {
+    $('#divConteudo').hide();
+        $('#spCarregar').show();
+            carregaDados();
+        } else {
+     alert('Id inválido');
+         }
+    });
+
+
+    function carregaDados() {
+        ajaxRequestApi(`http://localhost:5000/Consulta/${getParamByName('id')}`, 'GET', {}, '', function (e, statusCode) {
+            if (statusCode == 200) {
+                let d = e.data.split('T')[0].split('-').reverse().join('/');
+                $('#lblData').append(d);
+                $('#lblTipo').append(e.tipoConsulta);
+                $('#lblDescricao').append(e.descricao);
+            }
+    $('#spCarregar').hide();
+    $('#divConteudo').show();
+     });
+    }
+</script>

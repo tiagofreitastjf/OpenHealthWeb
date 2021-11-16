@@ -15,43 +15,6 @@
             <div class="card-header text-center">Notificações</div>
             <div class="card-body">
                 <div id="pnProntuario" class="row">
-                    @*<div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="col-sm-12">
-                                    <label class="txtTitulo">Titulo</label>
-                                </div>
-                                <div class="col-sm-12 mb-4">
-                                    <label class="txtDescricao">Descrição</label>
-                                </div>
-                                <div class="col-sm-12 text-center">
-                                    <button id="btnVerTodos" type="button" class="btn btn-secondary">
-                                        Ver todos
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="col-sm-12">
-                                    <label class="txtTitulo">Titulo</label>
-                                </div>
-                                <div class="col-sm-12 mb-4">
-                                    <label class="txtDescricao">Descrição</label>
-                                </div>
-                                <div class="col-sm-12 text-center">
-                                    <button id="btnSim" type="button" class="btn btn-secondary">
-                                        Sim
-                                    </button>
-                                    <button id="btnNao" type="button" class="btn btn-secondary">
-                                        Não
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
                 </div>
             </div>
         </div>
@@ -102,7 +65,7 @@
                                     <label class="txtDescricao">${data.consulta[i].descricao}</label>
                                 </div>
                                 <div class="col-sm-12 text-center">
-                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" value="${data.consulta[i].id}">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data.consulta[i].id}, 'Consulta')">
                                         Ver
                                     </button>
                                 </div>
@@ -126,7 +89,7 @@
                                     <label class="txtDescricao">${data.vacina[i].observacao}</label>
                                 </div>
                                 <div class="col-sm-12 text-center">
-                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" value="${data.vacina[i].id}">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data.vacina[i].id}, 'Vacina')">
                                         Ver
                                     </button>
                                 </div>
@@ -164,9 +127,15 @@
         );
     }
 
-    function AcessarFicha(id)
+    function AcessarFicha(id, ficha)
     {
-        window.location.replace("/Cliente/");
+        if (ficha == "Consulta"){
+            window.location.replace("/Cliente/FichaConsultaImpressao?id=" + id);
+        }
+        else if (ficha == "Vacina"){
+            window.location.replace("/Cliente/FichaVacinaImpressao?id=" + id);
+        }
+        
     }       
 
     function Acesso(permitir, id, idClinica)

@@ -12,7 +12,7 @@
     </div>
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-header bg-light text-center">Notificações</div>
+            <div class="card-header text-center">Notificações</div>
             <div class="card-body">
                 <div id="pnProntuario" class="row">
                     @*<div class="col-sm-4">
@@ -90,7 +90,7 @@
                 for (let i = 0; i < data.consulta.length; i++)
                 {
                     pn += `<div class="col-sm-4">
-                        <div class="card">
+                        <div class="card" style="height: 190px">
                             <div class="card-body">
                                 <div class="col-sm-12">
                                     <label class="txtData">${data.consulta[i].data}</label>
@@ -102,7 +102,7 @@
                                     <label class="txtDescricao">${data.consulta[i].descricao}</label>
                                 </div>
                                 <div class="col-sm-12 text-center">
-                                    <button id="btnVer" type="button" class="btn btn-secondary">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" value="${data.consulta[i].id}">
                                         Ver
                                     </button>
                                 </div>
@@ -114,7 +114,7 @@
                 for (let i = 0; i < data.consulta.length; i++)
                 {
                     pn += `<div class="col-sm-4">
-                        <div class="card">
+                        <div class="card" style="height: 190px">
                             <div class="card-body">
                                 <div class="col-sm-12">
                                     <label class="txtData">${data.vacina[i].data}</label>
@@ -126,7 +126,7 @@
                                     <label class="txtDescricao">${data.vacina[i].observacao}</label>
                                 </div>
                                 <div class="col-sm-12 text-center">
-                                    <button id="btnVer" type="button" class="btn btn-secondary">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" value="${data.vacina[i].id}">
                                         Ver
                                     </button>
                                 </div>
@@ -135,7 +135,55 @@
                     </div>`;
                 }
 
+                for (let i = 0; i < data.solicitacoes.length; i++)
+                {
+                    pn += `<div class="col-sm-4">
+                        <div class="card" style="height: 190px">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">${data.solicitacoes[i].titulo}</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">${data.solicitacoes[i].descricao}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <a id="btnSim" type="button" class="btn btn-secondary btn-success btnSim" onclick="Acesso(true, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
+                                        Sim
+                                    </a>
+                                    <button id="btnNao" type="button" class="btn btn-secondary btn-danger btnNao" onclick="Acesso(false, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
+                                        Não
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
                 $("[id$=pnProntuario]").empty().append(pn);
+            }
+        );
+    }
+
+    function AcessarFicha(id)
+    {
+        window.location.replace("/Cliente/");
+    }       
+
+    function Acesso(permitir, id, idClinica)
+    {
+        ajaxRequestApi(
+            urlAPI + "Prontuario/AcessoProntuario",
+            "GET",
+            {
+                id: id,
+                idCliente: getParamByName("idCliente"),
+                idClinica: idClinica,
+                permitir: permitir
+            },
+            "",
+            function (data)
+            {
+                CarregarDados();
             }
         );
     }

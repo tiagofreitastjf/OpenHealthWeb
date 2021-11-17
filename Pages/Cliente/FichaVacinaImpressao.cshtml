@@ -1,0 +1,53 @@
+@page
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model OpenHealthWeb.Pages.Profissional.FichaVacinaImpressaoModel
+@{
+    ViewData["Title"] = "Vacina";
+}
+
+
+<div class="col-md-12 d-flex justify-content-center">
+    <div class="card col-6">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <h6>Vacina</h6>
+            </div>
+            <div class="spinner-border text-center" role="status" id="spCarregar" style="display: none">
+                <span class="sr-only"></span>
+            </div>
+            <div id="divConteudo" class="text-left">
+                <label class="col-form-label" style="font-weight:bold">Data: <label class="col-form-label" id="lblData" style="font-weight:500"></label></label><br />
+                <label class="col-form-label" style="font-weight:bold">Tipo: <label class="col-form-label" id="lblTipo" style="font-weight:500"></label></label><br />
+                <label class="col-form-label" style="font-weight:bold">Observação: <label class="col-form-label" id="lblOservacao" style="font-weight:500"></label></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        if (getParamByName('id')) {
+    $('#divConteudo').hide();
+        $('#spCarregar').show();
+            carregaDados();
+        } else {
+     alert('Id inválido');
+         }
+    });
+
+
+    function carregaDados() {
+        ajaxRequestApi(`http://localhost:5000/Vacina/${getParamByName('id')}`, 'GET', {}, '', function (e, statusCode) {
+            if (statusCode == 200) {
+                let d = e.data.split('T')[0].split('-').reverse().join('/');
+                $('#lblData').append(d);
+                $('#lblTipo').append(e.tipoVacina);
+                $('#lblObservacao').append(e.observacao);
+            }
+    $('#spCarregar').hide();
+    $('#divConteudo').show();
+     });
+    }
+</script>

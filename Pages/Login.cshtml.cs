@@ -55,6 +55,6 @@ namespace OpenHealthWeb.Pages
     {
         public string Email { get; set; }
         public string Senha { get; set; }
-        public string TipoLogin { get; set; }
+        public string TipoLogin { get; set; } = "Paciente";
     }
 }

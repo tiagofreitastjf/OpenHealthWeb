@@ -13,7 +13,11 @@ namespace OpenHealthWeb.Pages.Profissional
             {
                 return Redirect("/Login");
             }
-            
+            else if (HttpContext.Session.GetString("tipoUsuario") == "Paciente")
+            {
+                return Redirect("/Cliente/Prontuario");
+            }
+
             return null;
         }
     }

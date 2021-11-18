@@ -22,11 +22,14 @@ namespace OpenHealthWeb
                 HttpClient client = new HttpClient();
                 var sJson = new { Email = email, Senha = senha };
                 string jsonSerialize = JsonConvert.SerializeObject(sJson, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                HttpResponseMessage response = await client.PostAsync($"http://localhost:5000/{(cliente? "Cliente" : "Profissional")}/login", new StringContent(jsonSerialize, System.Text.Encoding.UTF8, "application/json"));
+                string link = "";
+                if (cliente) link = "http://localhost:5000/Cliente/login";
+                else link = "http://localhost:5000/Profissional/login";
+                HttpResponseMessage response = await client.PostAsync(link, new StringContent(jsonSerialize, System.Text.Encoding.UTF8, "application/json"));
                 string content = await response.Content.ReadAsStringAsync();
                 return JObject.Parse(content);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -51,7 +54,7 @@ namespace OpenHealthWeb
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 return tokenHandler.WriteToken(token);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -19,7 +19,7 @@ namespace OpenHealthWeb.Pages.Profissional
             }
             else if (HttpContext.Session.GetString("tipoUsuario") == "Paciente")
             {
-                return Redirect("/Cliente/Prontuario");
+                return Redirect("/Cliente/Prontuario?idCliente=" + HttpContext.Session.GetString("idUsuario"));
             }
 
             return null;

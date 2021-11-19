@@ -31,9 +31,9 @@
                             <input asp-for="Login.Email" id="txtEmail" type="email" class="form-control" placeholder="Exemplo: joao@gmail.com" />
                             <label class="col-form-label">Senha</label>
                             <input asp-for="Login.Senha" id="txtSenha" type="password" class="form-control" />
-                            <input type="radio" id="radioCliente" name="tipoUsuario" checked asp-for="Login.TipoLogin" value="Paciente"/>
+                            <input type="radio" id="radioCliente" name="tipoUsuario" checked asp-for="Login.Paciente" value="true"/>
                             <label for="radioCliente">Paciente</label>
-                            <input type="radio" id="radioProfissional" name="tipoUsuario" asp-for="Login.TipoLogin" value="Profissional"/>
+                            <input type="radio" id="radioProfissional" name="tipoUsuario" asp-for="Login.Profissional" value="true"/>
                             <label for="radioProfissional">Profissional</label>
                             <div class="col-md-12 mt-3 mb-3">
                                 <a href="#">Esqueci a senha</a>
@@ -50,3 +50,7 @@
     </div>
 </body>
 </html>
+
+@code{
+
+} 

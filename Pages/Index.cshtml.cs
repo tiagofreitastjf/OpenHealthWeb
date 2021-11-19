@@ -27,8 +27,8 @@ namespace OpenHealthWeb.Pages
             }
             else
             {
-                if (HttpContext.Session.GetString("tipoUsuario") == "Paciente") return Redirect("/Cliente/Prontuario");
-                if (HttpContext.Session.GetString("tipoUsuario") == "Profissional") return Redirect("/Profissional/Prontuario");
+                if (HttpContext.Session.GetString("tipoUsuario") == "Paciente") return Redirect("/Cliente/Prontuario?idCliente=" + HttpContext.Session.GetString("idUsuario"));
+                if (HttpContext.Session.GetString("tipoUsuario") == "Profissional") return Redirect("/Profissional/Prontuario?idProfissional" + HttpContext.Session.GetString("idUsuario"));
             }
             //return Redirect($"/Cliente/Prontuario?idCliente=1");
             return null;

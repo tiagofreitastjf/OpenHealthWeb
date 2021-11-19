@@ -61,3 +61,8 @@ function getParamByName(name) {
     var results = regex.exec(url);
     return results == null ? null : results[1];
 }
+
+function VerificarRetorno(data) {
+    if (data.Erro != undefined && data.Erro == true) alert(data.Mensagem);
+    return;
+}

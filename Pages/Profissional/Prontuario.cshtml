@@ -7,7 +7,7 @@
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header text-center">Dados</div>
+                <div class="card-header">Profissional</div>
                 <div id="pnCliente" class="card-body">
                 </div>
             </div>
@@ -27,11 +27,20 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12 mb-3">
         <div class="card">
             <div class="card-header text-center">Notificações</div>
             <div class="card-body">
                 <div id="pnProntuario" class="row">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header text-center">Prontuários</div>
+            <div class="card-body">
+                <div id="pnProntuarios" class="row">
                 </div>
             </div>
         </div>
@@ -116,6 +125,25 @@
                 }
 
                 $("[id$=pnProntuario]").empty().append(pn);
+
+                let pnProntuarios = "";
+                for (let i = 0; i < data.prontuarios.length; i++)
+                {
+                    pnProntuarios += `<div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <button id="btnVerProntuario" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarProntuario(${data.prontuarios[i].idCliente})">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <label class="txtTitulo">${data.prontuarios[i].nome}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                $("[id$=pnProntuarios]").empty().append(pnProntuarios);
             }
         );
     }
@@ -128,7 +156,6 @@
         else if (ficha == "Vacina"){
             window.location.replace("/Cliente/FichaVacina?id=" + id + "$idCliente=" + idCliente);
         }
-        
     }  
 
     $("[id$=btnSolicitar]").unbind("click").bind("click", function(){
@@ -137,7 +164,7 @@
             "GET",
             {
                 CPF: $("[id$=txtCPF]").val(),
-                idProfissional: 1
+                idProfissional: getParamByName("idProfissional")
             },
             "",
             function (data)

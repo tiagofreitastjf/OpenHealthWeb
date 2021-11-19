@@ -15,6 +15,7 @@ namespace OpenHealthWeb.Pages
     {
         [BindProperty]
         public Login Login { get; set; }
+        public string[] Tipos = new[] { "Paciente", "Profissional" };
 
         public void OnGet()
         {
@@ -24,8 +25,6 @@ namespace OpenHealthWeb.Pages
         {
             if (Login.Email != null && Login.Senha != null)
             {
-                if (Login.Paciente == true) Login.TipoLogin = "Paciente";
-                if (Login.Profissional == true) Login.TipoLogin = "Profissional";
                 JObject json = await Usuario.Login(Login.Email, Login.Senha, Login.TipoLogin == "Paciente");
 
                 string returno = json.SelectToken("userNotFound") != null ? json.SelectToken("userNotFound").ToString() : null;
@@ -45,7 +44,7 @@ namespace OpenHealthWeb.Pages
                     if (HttpContext.Session.TryGetValue("Token", out session))
                     {
                         if (HttpContext.Session.GetString("tipoUsuario") == "Paciente") return Redirect("/Cliente/Prontuario?idCliente=" + HttpContext.Session.GetString("idUsuario"));
-                        if (HttpContext.Session.GetString("tipoUsuario") == "Profissional") return Redirect("/Profissional/Prontuario?idProfissional" + HttpContext.Session.GetString("idUsuario"));
+                        if (HttpContext.Session.GetString("tipoUsuario") == "Profissional") return Redirect("/Profissional/Prontuario?idProfissional=" + HttpContext.Session.GetString("idUsuario"));
                     }
                 }
             }
@@ -58,7 +57,5 @@ namespace OpenHealthWeb.Pages
         public string Email { get; set; }
         public string Senha { get; set; }
         public string TipoLogin { get; set; } = "Paciente";
-        public bool Paciente { get; set; }
-        public bool Profissional { get; set; }
     }
 }

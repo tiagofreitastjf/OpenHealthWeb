@@ -25,7 +25,7 @@ namespace OpenHealthWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages().AddRazorRuntimeCompilation();
-
+            services.AddServerSideBlazor();
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.

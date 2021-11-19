@@ -15,7 +15,7 @@ namespace OpenHealthWeb.Pages.Profissional
             }
             else if (HttpContext.Session.GetString("tipoUsuario") == "Profissional")
             {
-                return Redirect("/Profissional/Prontuario?idProfissional" + HttpContext.Session.GetString("idUsuario"));
+                return Redirect("/Profissional/Prontuario?idProfissional=" + HttpContext.Session.GetString("idUsuario"));
             }
 
             return null;

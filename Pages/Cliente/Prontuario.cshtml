@@ -2,25 +2,22 @@
 @model OpenHealthWeb.Pages.Cliente.ProntuarioModel
 @{
 }
-
 <div class="container">
     <div class="card mb-4">
-        <div class="card-header text-center">Dados</div>
+        <div class="card-header">Meus dados</div>
         <div id="pnCliente" class="card-body">
-            
         </div>
     </div>
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-header text-center">Notificações</div>
+            <div class="card-header text-center">Exames e notificações</div>
             <div class="card-body">
-                <div id="pnProntuario" class="row">
+                <div id="pnExames" class="row">
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
     let dados = {};
 
@@ -55,12 +52,12 @@
                     pn += `<div class="col-sm-4">
                         <div class="card" style="height: 190px">
                             <div class="card-body">
+                                <div class="col-sm-12 text-center">
+                                    <label class="txtTitulo">${data.consulta[i].tipoConsulta}</label>
+                                </div>
                                 <div class="col-sm-12">
                                     <label class="txtData">${data.consulta[i].data}</label>
                                 </div>    
-                                <div class="col-sm-12">
-                                    <label class="txtTitulo">${data.consulta[i].tipoConsulta}</label>
-                                </div>
                                 <div class="col-sm-12 mb-4">
                                     <label class="txtDescricao">${data.consulta[i].descricao}</label>
                                 </div>
@@ -74,16 +71,16 @@
                     </div>`;
                 }
 
-                for (let i = 0; i < data.consulta.length; i++)
+                for (let i = 0; i < data.vacina.length; i++)
                 {
                     pn += `<div class="col-sm-4">
                         <div class="card" style="height: 190px">
                             <div class="card-body">
-                                <div class="col-sm-12">
-                                    <label class="txtData">${data.vacina[i].data}</label>
+                                <div class="col-sm-12 text-center">
+                                    <label class="txtTitulo">${data.vacina[i].tipoVacina}</label>
                                 </div>
                                 <div class="col-sm-12">
-                                    <label class="txtTitulo">${data.vacina[i].tipoVacina}</label>
+                                    <label class="txtData">${data.vacina[i].data}</label>
                                 </div>
                                 <div class="col-sm-12 mb-4">
                                     <label class="txtDescricao">${data.vacina[i].observacao}</label>
@@ -103,7 +100,7 @@
                     pn += `<div class="col-sm-4">
                         <div class="card" style="height: 190px">
                             <div class="card-body">
-                                <div class="col-sm-12">
+                                <div class="col-sm-12 text-center">
                                     <label class="txtTitulo">${data.solicitacoes[i].titulo}</label>
                                 </div>
                                 <div class="col-sm-12 mb-4">
@@ -111,10 +108,10 @@
                                 </div>
                                 <div class="col-sm-12 text-center">
                                     <a id="btnSim" type="button" class="btn btn-secondary btn-success btnSim" onclick="Acesso(true, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
-                                        <i class="fas fa-lock"></i>&ensp;Sim
+                                        <i class="fas fa-lock-open"></i>&ensp;Sim
                                     </a>
                                     <button id="btnNao" type="button" class="btn btn-secondary btn-danger btnNao" onclick="Acesso(false, ${data.solicitacoes[i].id}, ${data.solicitacoes[i].idClinica})">
-                                        <i class="fas fa-lock-open"></i>&ensp;Não
+                                        <i class="fas fa-lock"></i>&ensp;Não
                                     </button>
                                 </div>
                             </div>
@@ -122,7 +119,7 @@
                     </div>`;
                 }
 
-                $("[id$=pnProntuario]").empty().append(pn);
+                $("[id$=pnExames]").empty().append(pn);
             }
         );
     }
@@ -135,7 +132,6 @@
         else if (ficha == "Vacina"){
             window.location.replace("/Cliente/FichaVacinaImpressao?id=" + id);
         }
-        
     }       
 
     function Acesso(permitir, id, idClinica)
@@ -152,6 +148,7 @@
             "",
             function (data)
             {
+                if(data.Erro == true) alert(data.Mensagem);
                 CarregarDados();
             }
         );

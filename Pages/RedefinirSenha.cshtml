@@ -1,7 +1,7 @@
 ﻿@page
-@model OpenHealthWeb.Pages.LoginModel
+@model OpenHealthWeb.Pages.RedefinirSenhaModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Redefinir senha";
     Layout = "";
 }
 <!DOCTYPE html>
@@ -10,12 +10,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/csslightgreensite.css" />
     <script src="~/js/Util.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/00dbf79896.js" crossorigin="anonymous"></script> 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -27,28 +27,13 @@
                     <div class="card">
                         <div class="row justify-content-center align-self-center pt-3"><h2 class="text-success" style="font-weight: 800;">Open Health</h2></div>
                         <div class="card-body">
-                            <label class="col-form-label">E-mail</label>
-                            <input asp-for="Login.Email" id="txtEmail" type="email" class="form-control" placeholder="Exemplo: joao@gmail.com" />
-                            <label class="col-form-label">Senha</label>
-                            <input asp-for="Login.Senha" id="txtSenha" type="password" class="form-control mb-2" />
-                            @foreach (var tipos in Model.Tipos)
-                            {
-                                if (tipos == "Paciente")
-                                {
-                                    <input type="radio" asp-for="Login.TipoLogin" value="@tipos" id="Tipos@(tipos)" checked/><label for="Tipos@(tipos)">&ensp;@tipos</label>
-                                }
-                                else
-                                {
-                                    <input type="radio" asp-for="Login.TipoLogin" value="@tipos" id="Tipos@(tipos)" /><label for="Tipos@(tipos)">&ensp;@tipos</label>   
-                                }
-                            }
+                            <label class="col-form-label">Nova senha</label>
+                            <input asp-for="Redefinir.Senha" id="txtNovaSenha" type="password" class="form-control" placeholder="Nova senha" />
+                            <label class="col-form-label">Confirmar senha</label>
+                            <input asp-for="Redefinir.SenhaConfirmar" id="txtConfirmarSenha" type="password" class="form-control mb-2" placeholder="Confirmar senha"/>
                             <div class="col-md-12 mt-3 mb-3">
-                                <a href="javascript:EnviarEmail()">Esqueci a senha</a>
                             </div>
-                            <button id="btnEntrar" type="submit" class="btn btn-success">Entrar&ensp;<i class="fas fa-sign-in-alt"></i></button>
-                            <div class="col-md-12 text-center mt-3">
-                                <a asp-page="/Cadastro">Não tem cadastro? Clique aqui para cadastrar</a>
-                            </div>
+                            <button id="btnRedefinir" type="button" onclick="RedefinirSenha()" class="btn btn-success w-100">Redefinir&ensp;<i class="fas fa-sync-alt"></i></button>
                         </div>
                     </div>
                 </div>
@@ -56,18 +41,22 @@
         </main>
     </div>
     <script>
-        function EnviarEmail()
+        function RedefinirSenha()
         {
             let erro = "";
-            let email = $("#txtEmail").val();
-            let tipo = $("#TiposPaciente").is(":checked") == true ? "Paciente" : $("#TiposProfissional").is(":checked") == true ? "Profissional" : null;
+            let novaSenha = $("#txtNovaSenha").val();
+            let confirmarSenha = $("#txtConfirmarSenha").val();
 
-            if (email == ""){
-                erro = "Digite seu email para continuar.";
+            if (novaSenha == ""){
+                erro = "Digite a nova senha.";
             }
 
-            if (tipo == null){
-                erro = "Informe se é paciente ou profissional.";
+            if (confirmarSenha == ""){
+                erro = "Confirme sua senha.";
+            }
+
+             if (confirmarSenha == novaSenha){
+                erro = "As senhas não são iguais.";
             }
 
             if (erro != ""){
@@ -75,12 +64,8 @@
                 return;
             }
 
-            let url = "";
-            if (tipo == "Paciente") url = "Cliente/RedefinirSenha";
-            if (tipo == "Profissional") url = "Profissional/RedefinirSenha";
-
             ajaxRequestApi(
-                urlAPI + url,
+                urlAPI + "/Cliente/NovaSenha",
                 "GET",
                 {
                     email: email,
@@ -89,11 +74,6 @@
                 "",
                 function (data)
                 {
-                    if (data.erro != undefined && data.erro == true)
-                    {
-                        alert(data.mensagem);
-                        return;
-                    }
                     alert("Um email foi enviado. Confira sua caixa de entrada.");
                 }
             );

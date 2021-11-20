@@ -2,7 +2,6 @@
 @model OpenHealthWeb.Pages.Profissional.ProntuarioModel
 @{
 }
-
 <div class="container">
     <div class="row mb-4">
         <div class="col-md-6">
@@ -29,7 +28,7 @@
     </div>
     <div class="col-sm-12 mb-3">
         <div class="card">
-            <div class="card-header text-center">Notificações</div>
+            <div class="card-header text-center">Últimas consultas e vacinações</div>
             <div class="card-body">
                 <div id="pnProntuario" class="row">
                 </div>
@@ -46,7 +45,6 @@
         </div>
     </div>
 </div>
-
 <script>
     let dados = {};
 
@@ -78,7 +76,7 @@
                 pn = "";
                 for (let i = 0; i < data.consulta.length; i++)
                 {
-                    pn += `<div class="col-sm-4">
+                    pn += `<div class="col-sm-4 mb-3">
                         <div class="card" style="height: 190px">
                             <div class="card-body">
                                 <div class="col-sm-12">
@@ -100,7 +98,7 @@
                     </div>`;
                 }
 
-                for (let i = 0; i < data.consulta.length; i++)
+                for (let i = 0; i < data.vacina.length; i++)
                 {
                     pn += `<div class="col-sm-4">
                         <div class="card" style="height: 190px">
@@ -133,10 +131,21 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-sm-12">
+                                    <button id="btnNovaConsulta" type="button" class="btn btn-secondary btn-primary text-light" onclick="NovaConsulta(${data.prontuarios[i].idCliente})">
+                                        <i class="fas fa-plus"></i>&ensp;Consulta
+                                    </button>
+                                    <button id="btnNovaVacina" type="button" class="btn btn-secondary btn-primary text-light" onclick="NovaVacina(${data.prontuarios[i].idCliente})">
+                                        <i class="fas fa-plus"></i>&ensp;Vacina
+                                    </button>
                                     <button id="btnVerProntuario" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarProntuario(${data.prontuarios[i].idCliente})">
                                         <i class="fas fa-eye"></i>
                                     </button>
+                                    <button id="btnFechar${data.prontuarios[i].idCliente}" type="button" style="display: none;" class="btn btn-secondary btn-primary text-light" onclick="FecharProntuario(${data.prontuarios[i].idCliente})">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                     <label class="txtTitulo">${data.prontuarios[i].nome}</label>
+                                </div>
+                                <div id="pnCliente${data.prontuarios[i].idCliente}" class="row mt-3" style="display: none;">
                                 </div>
                             </div>
                         </div>
@@ -151,14 +160,25 @@
     function AcessarFicha(id, idCliente, ficha)
     {
         if (ficha == "Consulta"){
-            window.location.replace("/Cliente/FichaConsulta?id=" + id + "$idCliente=" + idCliente);
+            window.location.replace("/Profissional/FichaConsulta?id=" + id + "$idCliente=" + idCliente);
         }
         else if (ficha == "Vacina"){
-            window.location.replace("/Cliente/FichaVacina?id=" + id + "$idCliente=" + idCliente);
+            window.location.replace("/Profissional/FichaVacina?id=" + id + "$idCliente=" + idCliente);
         }
     }  
 
-    $("[id$=btnSolicitar]").unbind("click").bind("click", function(){
+    function NovaConsulta(idCliente)
+    {
+        window.location.replace("/Profissional/FichaConsulta?idCliente=" + idCliente);
+    }  
+
+    function NovaVacina(idCliente)
+    {
+        window.location.replace("/Profissional/FichaVacina?idCliente=" + idCliente);
+    }  
+
+    $("[id$=btnSolicitar]").unbind("click").bind("click", function()
+    {
         ajaxRequestApi(
             urlAPI + "Prontuario/SolicitarAcesso",
             "GET",
@@ -173,4 +193,101 @@
             }
         );
     });
+    
+    function AcessarProntuario(idCliente)
+    {
+        let idPn = `[id$=pnCliente${idCliente}]`;
+        $(idPn).empty();
+        //Consultas
+        ajaxRequestApi(
+            urlAPI + "Consulta/Clinica",
+            "GET",
+            {
+                idCliente: idCliente,
+                idProfissional: getParamByName("idProfissional")
+            },
+            "",
+            function (data)
+            {
+                let pn = "";
+                for (let i = 0; i < data.length; i++)
+                {
+                    pn += `<div class="col-sm-4 mb-3">
+                        <div class="card" style="height: 190px">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtData">${data[i].data}</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">${data[i].tipoConsulta}</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">${data[i].descricao}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data[i].id}, ${data[i].idCliente},'Consulta')">
+                                        <i class="fas fa-eye"></i>&ensp;Ver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    $(idPn).append(pn);
+                }
+            }
+        );
+
+        //Vacinas
+        ajaxRequestApi(
+            urlAPI + "Vacina/Clinica",
+            "GET",
+            {
+                idCliente: idCliente,
+                idProfissional: getParamByName("idProfissional")
+            },
+            "",
+            function (data)
+            {
+                let pn = "";
+                for (let i = 0; i < data.length; i++)
+                {
+                    pn += `<div class="col-sm-4 mb-3">
+                        <div class="card" style="height: 190px">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtData">${data[i].data}</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">${data[i].tipoVacina}</label>
+                                </div>
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtDescricao">${data[i].observacao}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnVer" type="button" class="btn btn-secondary btn-primary text-light" onclick="AcessarFicha(${data[i].id}, ${data[i].idCliente},'Vacina')">
+                                        <i class="fas fa-eye"></i>&ensp;Ver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    $(idPn).append(pn);
+                }
+            }
+        );
+
+        $(idPn).show();
+        let idBtn =  `[id$=btnFechar${idCliente}]`;
+        $(idBtn).show();
+    }
+
+    function FecharProntuario(id)
+    {
+        let idPn = `[id$=pnCliente${id}]`;
+        $(idPn).hide();
+        let idBtn =  `[id$=btnFechar${id}]`;
+        $(idBtn).hide();
+    }
 </script>

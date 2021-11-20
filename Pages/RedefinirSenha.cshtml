@@ -28,9 +28,9 @@
                         <div class="row justify-content-center align-self-center pt-3"><h2 class="text-success" style="font-weight: 800;">Open Health</h2></div>
                         <div class="card-body">
                             <label class="col-form-label">Nova senha</label>
-                            <input asp-for="Redefinir.Senha" id="txtNovaSenha" type="password" class="form-control" placeholder="Nova senha" />
+                            <input id="txtNovaSenha" type="password" class="form-control" placeholder="Nova senha" />
                             <label class="col-form-label">Confirmar senha</label>
-                            <input asp-for="Redefinir.SenhaConfirmar" id="txtConfirmarSenha" type="password" class="form-control mb-2" placeholder="Confirmar senha"/>
+                            <input id="txtConfirmarSenha" type="password" class="form-control mb-2" placeholder="Confirmar senha"/>
                             <div class="col-md-12 mt-3 mb-3">
                             </div>
                             <button id="btnRedefinir" type="button" onclick="RedefinirSenha()" class="btn btn-success w-100">Redefinir&ensp;<i class="fas fa-sync-alt"></i></button>
@@ -64,17 +64,21 @@
                 return;
             }
 
+            let url = "";
+            if (getParamByName("tipo") == "Paciente") url = "Cliente/AtualizarSenha";
+            if (getParamByName("tipo") == "Profissional") url = "Profissional/AtualizarSenha";
+
             ajaxRequestApi(
-                urlAPI + "/Cliente/NovaSenha",
+                urlAPI + url,
                 "GET",
                 {
-                    email: email,
-                    tipo: tipo
+                    id: getParamByName("id"),
+                    novaSenha: novaSenha
                 },
                 "",
                 function (data)
                 {
-                    alert("Um email foi enviado. Confira sua caixa de entrada.");
+                    window.location.replace("/Login");
                 }
             );
         }

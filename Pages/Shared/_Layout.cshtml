@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,24 +31,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-page="/Index"><i class="fas fa-home"></i></a>
                         </li>
-                        @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Prontuário</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Solicitacao">Solicitações</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/EnviarExame">Enviar Exames</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/MeusExames">Exames</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Conta</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Ajuda</a>
-                        </li>*@
+                        @if (Context.Session.GetString("tipoUsuario") == "Paciente")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Cliente/Agenda"><i class="fas fa-calendar-alt"></i></a>
+                            </li>
+                        }
+                        else if (Context.Session.GetString("tipoUsuario") == "Profissional")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Profissional/Agenda"><i class="fas fa-calendar-alt"></i></a>
+                            </li>
+                        }
                     </ul>
                     <a type="button" asp-area="" asp-page="/Logout" class="nav-link btn bg-transparent text-light">Sair&ensp;<i class="fas fa-sign-out-alt"></i></a>
                 </div>

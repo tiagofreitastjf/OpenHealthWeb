@@ -1,0 +1,89 @@
+﻿@page
+@model OpenHealthWeb.Pages.Profissional.AgendaModel
+@{
+}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header">Agendamentos</div>
+        <div id="pnAgendamentos" class="card-body">
+        </div>
+    </div>
+</div>
+<script>
+    let dados = {};
+    let clinicas = {};
+
+    $(document).ready(function (){
+        CarregarDados();
+    });
+
+    function CarregarDados()
+    {
+        ajaxRequestApi(
+            urlAPI + "Profissional/GetAgendamentos",
+            "GET",
+            {
+                idProfissional: getParamByName("idProfissional")
+            },
+            "",
+            function (data)
+            {
+                dados = data;
+                let pn = "";
+
+                for (let i = 0; i < data.length; i++)
+                {
+                    pn += `<div class="col-sm">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Consulta/Exame</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="txtData">Data e hora: ${data[i].data}</label>&ensp;
+                                    <label class="txtMedico">Paciente: ${data[i].paciente}</label>&ensp;
+                                    <label class="txtStatus">Status: ${data[i].status}</label>
+                                </div>    
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtLocal">Local: ${data[i].local}</label>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button id="btnDesmarcar" type="button" class="btn btn-success btn-primary text-light" onclick="AgendarDesmarcar(${data[i].id}, true)">
+                                        <i class="fas fa-calendar-check"></i>&ensp;Confirmar
+                                    </button>
+                                    <button id="btnDesmarcar" type="button" class="btn btn-danger btn-primary text-light" onclick="AgendarDesmarcar(${data[i].id}, false)">
+                                        <i class="fas fa-calendar-times"></i>&ensp;Conflito de horário
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                $("[id$=pnAgendamentos]").empty().append(pn);
+
+                if(data.length == 0)
+                {
+                    $("[id$=pnAgendamentos]").empty().append("<div class='text-center'><label>Nenhum agendamento marcado.</label></div>");
+                }
+            }
+        );
+    }
+
+    function AgendarDesmarcar(id, confirmar)
+    {
+        ajaxRequestApi(
+            urlAPI + "Profissional/AgendarDesmarcar",
+            "GET",
+            {
+                id: id,
+                confirmar: confirmar
+            },
+            "",
+            function (data)
+            {
+                CarregarDados();
+            }
+        );
+    }
+</script>

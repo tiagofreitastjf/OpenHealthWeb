@@ -1,0 +1,204 @@
+﻿@page
+@model OpenHealthWeb.Pages.Cliente.AgendaModel
+@{
+}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header">Agendamentos</div>
+        <div id="pnAgendamentos" class="card-body">
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header text-center">Agendar nas clínica próximas</div>
+            <div class="card-body">
+                <div id="pnAgendar" class="row">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let dados = {};
+    let clinicas = {};
+
+    $(document).ready(function (){
+        CarregarDados();
+    });
+
+    function CarregarDados()
+    {
+        ajaxRequestApi(
+            urlAPI + "Cliente/GetAgendamentos",
+            "GET",
+            {
+                idCliente: getParamByName("idCliente")
+            },
+            "",
+            function (data)
+            {
+                dados = data;
+                let pn = "";
+
+                for (let i = 0; i < data.length; i++)
+                {
+                    pn += `<div class="col-sm">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm-12">
+                                    <label class="txtTitulo">Consulta/Exame</label>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="txtData">Data e hora: ${data[i].data}</label>&ensp;
+                                    <label class="txtMedico">Médico: ${data[i].medico}</label>&ensp;
+                                    <label class="txtStatus">Status: ${data[i].status}</label>
+                                </div>    
+                                <div class="col-sm-12 mb-4">
+                                    <label class="txtLocal">Local: ${data[i].local}</label>
+                                </div>
+                                ${ data[i].status == "Confirmado" ? 
+                                `<div class="col-sm-12 text-center">
+                                    <button id="btnDesmarcar" type="button" class="btn btn-danger btn-primary text-light" onclick="Desmarcar(${data[i].id})">
+                                        <i class="fas fa-calendar-times"></i>&ensp;Desmarcar
+                                    </button>
+                                </div>` : ""}
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                $("[id$=pnAgendamentos]").empty().append(pn);
+
+                if(data.length == 0)
+                {
+                    $("[id$=pnAgendamentos]").empty().append("<div class='text-center'><label>Nenhum agendamento marcado.</label></div>");
+                }
+            }
+        );
+
+        ajaxRequestApi(
+            urlAPI + "Clinica/GetClinicasProximas",
+            "GET",
+            {
+                idCliente: getParamByName("idCliente")
+            },
+            "",
+            function (data)
+            {
+                clinicas = data;
+                let pnClinicas = "";
+                for (let i = 0; i < data.length; i++)
+                {
+                    pnClinicas += `<div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-sm">
+                                    <a href="javascript:ExibirProfissionais(${data[i].id}, ${i})" class="text-black" style="text-decoration: none; color: black"><i class="fas fa-eye"></i></a>&ensp;
+                                    <a href="javascript:FecharProfissionais(${data[i].id}, ${i})" class="text-black" style="text-decoration: none; color: black"><i class="fas fa-times"></i></a>&ensp;
+                                    <label class="txtTitulo text-black" style="text-decoration: none">${data[i].nome}</label>
+                                </div>
+                                <div id="pnMedicos${data[i].id}" class="row mt-3" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                $("[id$=pnAgendar]").empty().append(pnClinicas);
+            }
+        );
+    }
+
+    function ExibirProfissionais(id, i)
+    {
+        let idPn = `[id$=pnMedicos${id}]`;
+        let pnMedicos = "<label class=' text-black'>Médicos disponíveis</label>";
+        let medicos = clinicas[i].profissionais;
+        for (let i = 0; i < medicos.length; i++)
+        {
+            pnMedicos += `<div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <label class="txtTitulo">${medicos[i].nome}</label>
+                            <div class="col-sm-auto">
+                                <input class="txtData form-control col-2" type="date"/>
+                            </div>
+                            <div class="col-sm-auto">
+                                <input class="txtHora form-control col-2" type="time"/>
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="btnNovaConsulta" type="button" class="btn btn-secondary btn-primary text-light" onclick="Agendar(${medicos[i].id}, ${id})">
+                                    <i class="fas fa-calendar-plus"></i>&ensp;Marcar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        $(idPn).empty().append(pnMedicos);
+        $(idPn).show();
+    }
+
+    function FecharProfissionais(id, i)
+    {
+        let idPn = `[id$=pnMedicos${id}]`;
+        $(idPn).hide();
+    }
+
+    function Agendar(idMedico, idClinica)
+    {
+        if ($(".txtData").val() == "")
+        {
+            alert("Informe a data.");
+            return;
+        }
+
+        if ($(".txtHora").val() == "")
+        {
+            alert("Informe a hora.");
+            return;
+        }
+
+        ajaxRequestApi(
+            urlAPI + "Cliente/Agendar",
+            "POST",
+            {
+                idCliente: getParamByName("idCliente"),
+                idProfissional: idMedico,
+                idClinica: idClinica,
+                data: $(".txtData").val(),
+                hora: $(".txtHora").val()
+            },
+            "",
+            function (data)
+            {
+                alert("Consulta/Exame marcado com sucesso.");
+                CarregarDados();
+            }
+        );
+    }
+
+    function Desmarcar(id)
+    {
+        ajaxRequestApi(
+            urlAPI + "Cliente/Desmarcar",
+            "POST",
+            {
+                idCliente: getParamByName("idCliente"),
+                idProfissional: idMedico,
+                idClinica: idClinica,
+                data: $(".txtData").val(),
+                hora: $(".txtHora").val()
+            },
+            "",
+            function (data)
+            {
+                alert("Consulta/Exame desmarcado com sucesso.");
+                CarregarDados();
+            }
+        );
+    }
+</script>
